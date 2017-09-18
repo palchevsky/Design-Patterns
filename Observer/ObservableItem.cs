@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Observer
 {
@@ -10,11 +7,11 @@ namespace Observer
     {
         private Number _value;
 
-        List<IObserver> _observers;
+        private readonly List<IObserver> _observers;
 
         public Number Value
         {
-            get { return _value; }
+            get => _value;
             set
             {
                 if (_value != value)

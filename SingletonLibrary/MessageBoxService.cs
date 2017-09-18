@@ -1,12 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
 
 namespace SingletonLibrary
 {
     internal class MessageBoxService:IMessageService
     {
-
         private static readonly MessageBoxService _instance = new MessageBoxService();
 
         static MessageBoxService()

@@ -7,9 +7,7 @@ namespace SingletonLibrary
     internal class FileService:IFileService
     {
         private static readonly FileService _instance = new FileService();
-        private static OpenFileDialog _openFileDialog = new OpenFileDialog();
-        private static SaveFileDialog _saveFileDialog = new SaveFileDialog();
-        //private static FileStream _fileStream = new FileStream();
+        private static readonly OpenFileDialog _openFileDialog = new OpenFileDialog();
 
         static FileService()
         {

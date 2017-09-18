@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /*
  * Задание № 6
  * Реализуйте простую модель чата/мессенджера с возможностью личной переписки,
  * хранения а также объединения в группы участников (паттерн Mediator).
- */ 
+ */
 
 namespace Chat
 {

@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Observer
+﻿namespace Observer
 {
     public class Observer: IObserver
     {
-        IObservable _collObs;
+        private IObservable _collObs;
 
         public Observer(IObservable obs)
         {

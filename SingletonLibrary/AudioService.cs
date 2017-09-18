@@ -39,7 +39,7 @@ namespace SingletonLibrary
 
         public static void GetInfo()
         {
-            MessageBox.Show("Пока ничего нет");
+            MessageBox.Show(@"File copy.wav saved to the folder with exe file!");
         }
 
         void IAudioService.OpenMedia(string fileName)

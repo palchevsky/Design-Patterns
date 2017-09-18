@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /*
  * Задание № 5
@@ -12,7 +8,7 @@ using System.Threading.Tasks;
  * возможность подписываться на добавление/удаление элементов (паттерн Observer).
  * На примере простого консольного приложения продемонстрируйте возможности
  * коллекции.
- */ 
+ */
 
 
 namespace Observer

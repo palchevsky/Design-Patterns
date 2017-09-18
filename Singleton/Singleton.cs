@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using SingletonLibrary;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using SingletonLibrary;
 
 
 /*
@@ -33,14 +26,13 @@ namespace Singleton
 {
     public partial class Test : Form
     {
-        IFactory smt;
-        //private string _fileName;
-        AudioInfo audioInfo;
+        private readonly IFactory _smt;
+        private AudioInfo _audioInfo;
+
         public Test()
         {
-            smt = new ServicesFactory();
-            audioInfo = new AudioInfo();
-            //_fileName = "";
+            _smt = new ServicesFactory();
+            _audioInfo = new AudioInfo();
             InitializeComponent();
         }
 
@@ -48,12 +40,12 @@ namespace Singleton
         {
             try
             {
-                IAudioService aud = smt.CreateAudioService();
+                IAudioService aud = _smt.CreateAudioService();
                 aud.Play();
             }
             catch (Exception ex2)
             {
-                IMessageService msg = smt.CreateMessageBoxService();
+                IMessageService msg = _smt.CreateMessageBoxService();
                 msg.ExceptionMessageBox(ex2);
             }
         }
@@ -62,12 +54,12 @@ namespace Singleton
         {
             try
             {
-                IAudioService aud = smt.CreateAudioService();
+                IAudioService aud = _smt.CreateAudioService();
                 aud.Stop();
             }
             catch (Exception ex2)
             {
-                IMessageService msg = smt.CreateMessageBoxService();
+                IMessageService msg = _smt.CreateMessageBoxService();
                 msg.ExceptionMessageBox(ex2);
             }
         }
@@ -76,15 +68,15 @@ namespace Singleton
         {
             try
             {
-                IFileService file = smt.CreateFileService();
-                audioInfo.FileName=file.OpenFile();
-                IAudioService audio = smt.CreateAudioService();
-                audio.OpenMedia(audioInfo.FileName);
-                WaveHeaderIN(audioInfo.FileName);
+                IFileService file = _smt.CreateFileService();
+                _audioInfo.FileName=file.OpenFile();
+                IAudioService audio = _smt.CreateAudioService();
+                audio.OpenMedia(_audioInfo.FileName);
+                WaveHeaderIn(_audioInfo.FileName);
             }
             catch (Exception ex2)
             {
-                IMessageService msg = smt.CreateMessageBoxService();
+                IMessageService msg = _smt.CreateMessageBoxService();
                 msg.ExceptionMessageBox(ex2);
             }
         }
@@ -94,18 +86,18 @@ namespace Singleton
             try
             {
                 MemoryStream inMemoryCopy = new MemoryStream();
-                using (FileStream fs = File.OpenRead(audioInfo.FileName))
+                using (FileStream fs = File.OpenRead(_audioInfo.FileName))
                 {
                     fs.CopyTo(inMemoryCopy);
                 }
 
-                IFileService file = smt.CreateFileService();
+                IFileService file = _smt.CreateFileService();
                file.SaveFile(@"copy.wav",inMemoryCopy);
-                MessageBox.Show("File copy.wav saved to the folder with exe file!");
+                MessageBox.Show(@"File copy.wav saved to the folder with exe file!");
             }
             catch (Exception ex2)
             {
-                IMessageService msg = smt.CreateMessageBoxService();
+                IMessageService msg = _smt.CreateMessageBoxService();
                 msg.ExceptionMessageBox(ex2);
             }
         }
@@ -115,14 +107,13 @@ namespace Singleton
             try
             {
                 string destinationFile = @"E:\moved.wav";
-                IFileService file = smt.CreateFileService();
-                file.MoveFile(audioInfo.FileName, destinationFile);
-                MessageBox.Show("Saved to: " + destinationFile, "File Moved");
-                //file.DeleteFile(_fileName);
+                IFileService file = _smt.CreateFileService();
+                file.MoveFile(_audioInfo.FileName, destinationFile);
+                MessageBox.Show(@"Saved to: " + destinationFile, @"File Moved");
             }
             catch (Exception ex2)
             {
-                IMessageService msg = smt.CreateMessageBoxService();
+                IMessageService msg = _smt.CreateMessageBoxService();
                 msg.ExceptionMessageBox(ex2);
             }
         }
@@ -131,40 +122,38 @@ namespace Singleton
         {
             try
             {
-                IFileService file = smt.CreateFileService();
-                file.DeleteFile(audioInfo.FileName);
-                MessageBox.Show("File " + audioInfo.FileName + " succesfully deleted!", "File Deleted");
+                IFileService file = _smt.CreateFileService();
+                file.DeleteFile(_audioInfo.FileName);
+                MessageBox.Show(@"File " + _audioInfo.FileName + @" succesfully deleted!", @"File Deleted");
             }
             catch (Exception ex2)
             {
-                IMessageService msg = smt.CreateMessageBoxService();
+                IMessageService msg = _smt.CreateMessageBoxService();
                 msg.ExceptionMessageBox(ex2);
             }
         }
 
-        private void WaveHeaderIN(string spath)
+        private void WaveHeaderIn(string spath)
         {
             FileStream fs = new FileStream(spath, FileMode.Open, FileAccess.Read);
             BinaryReader br = new BinaryReader(fs);
-            audioInfo.Length= (int)fs.Length - 8;
+            _audioInfo.Length= (int)fs.Length - 8;
             fs.Position = 22;
-            audioInfo.Channels= br.ReadInt16();
+            _audioInfo.Channels= br.ReadInt16();
             fs.Position = 24;
-            audioInfo.SampleRate= br.ReadInt32();
+            _audioInfo.SampleRate= br.ReadInt32();
             fs.Position = 34;
-            audioInfo.BitsPerSample= br.ReadInt16();
-            audioInfo.DataLength= (int)fs.Length - 44;
+            _audioInfo.BitsPerSample= br.ReadInt16();
+            _audioInfo.DataLength= (int)fs.Length - 44;
             br.Close();
             fs.Close();
 
-            lbFileNameInfo.Text = audioInfo.FileName;
-            lbLengthInfo.Text = audioInfo.Length.ToString() + " bytes";
-            lbChannelsInfo.Text = audioInfo.Channels.ToString();
-            lbSampleRateInfo.Text = audioInfo.SampleRate.ToString()+" Hz";
-            lbBPSInfo.Text = audioInfo.BitsPerSample.ToString();
-            lbDataLengthInfo.Text = audioInfo.DataLength.ToString()+ " bytes";
-
+            lbFileNameInfo.Text = _audioInfo.FileName;
+            lbLengthInfo.Text = _audioInfo.Length.ToString() + @" bytes";
+            lbChannelsInfo.Text = _audioInfo.Channels.ToString();
+            lbSampleRateInfo.Text = _audioInfo.SampleRate.ToString()+ @" Hz";
+            lbBPSInfo.Text = _audioInfo.BitsPerSample.ToString();
+            lbDataLengthInfo.Text = _audioInfo.DataLength.ToString()+ @" bytes";
         }
-
     }
 }
